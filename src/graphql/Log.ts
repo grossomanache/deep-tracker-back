@@ -8,7 +8,6 @@ export const Log = objectType({
   definition(t) {
     t.nonNull.id("id");
     t.nonNull.dateTime("date");
-    t.nonNull.string("newfield");
     t.field("postedBy", {
       type: "User",
       resolve(parent, args, context) {

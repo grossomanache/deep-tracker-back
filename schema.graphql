@@ -22,7 +22,6 @@ type Log {
   date: DateTime!
   id: ID!
   metric: [Metric!]!
-  newfield: String!
   postedBy: User
 }
 
@@ -33,7 +32,7 @@ type Metric {
 
 type Mutation {
   login(email: String!, password: String!): AuthPayload!
-  signup(email: String!, name: String!, password: String!): AuthPayload!
+  signup(email: String!, name: String!, password: String!, surname: String!): AuthPayload!
 }
 
 type Query {

@@ -2,6 +2,8 @@ import "graphql-import-node";
 import { execute, parse } from "graphql";
 import { schema } from "./schema";
 import fastify from "fastify";
+import { PrismaClient } from "@prisma/client";
+import { contextFactory } from "./context";
 import {
   getGraphQLParameters,
   sendResult,
@@ -10,6 +12,8 @@ import {
   renderGraphiQL,
   shouldRenderGraphiQL,
 } from "graphql-helix";
+
+export const prisma = new PrismaClient();
 
 async function main() {
   const server = fastify();
@@ -47,6 +51,7 @@ async function main() {
         request,
         schema,
         operationName,
+        contextFactory,
         query: queryParams,
         variables,
       });
