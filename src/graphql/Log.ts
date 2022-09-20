@@ -1,13 +1,20 @@
-import { objectType } from "nexus";
+import { objectType, extendType } from "nexus";
+import { resolve } from "path";
 import { NexusGenObjects } from "../../nexus-typegen";
-import { Metric } from "./Metric";
+
+export const Metric = objectType({
+  name: "Metric",
+  definition(t) {
+    t.nonNull.string("name");
+    t.nonNull.int("value");
+  },
+});
 
 export const Log = objectType({
   name: "Log",
   definition(t) {
     t.nonNull.id("id");
     t.nonNull.dateTime("date");
-    t.nonNull.string("newfield");
     t.field("postedBy", {
       type: "User",
       resolve(parent, args, context) {
@@ -17,5 +24,14 @@ export const Log = objectType({
       },
     });
     t.nonNull.list.nonNull.field("metric", { type: Metric });
+  },
+});
+
+export const Feed = objectType({
+  name: "Feed",
+  definition(t) {
+    t.nonNull.list.nonNull.field("links", { type: Log });
+    t.nonNull.int("count");
+    t.id("id");
   },
 });

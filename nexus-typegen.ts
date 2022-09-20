@@ -43,16 +43,25 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  AuthPayload: { // root type
+    token: string; // String!
+    user: NexusGenRootTypes['User']; // User!
+  }
+  Feed: { // root type
+    count: number; // Int!
+    id?: string | null; // ID
+    links: NexusGenRootTypes['Log'][]; // [Log!]!
+  }
   Log: { // root type
     date: NexusGenScalars['DateTime']; // DateTime!
     id: string; // ID!
     metric: NexusGenRootTypes['Metric'][]; // [Metric!]!
-    newfield: string; // String!
   }
   Metric: { // root type
     name: string; // String!
     value: number; // Int!
   }
+  Mutation: {};
   Query: {};
   User: { // root type
     email: string; // String!
@@ -74,16 +83,28 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  AuthPayload: { // field return type
+    token: string; // String!
+    user: NexusGenRootTypes['User']; // User!
+  }
+  Feed: { // field return type
+    count: number; // Int!
+    id: string | null; // ID
+    links: NexusGenRootTypes['Log'][]; // [Log!]!
+  }
   Log: { // field return type
     date: NexusGenScalars['DateTime']; // DateTime!
     id: string; // ID!
     metric: NexusGenRootTypes['Metric'][]; // [Metric!]!
-    newfield: string; // String!
     postedBy: NexusGenRootTypes['User'] | null; // User
   }
   Metric: { // field return type
     name: string; // String!
     value: number; // Int!
+  }
+  Mutation: { // field return type
+    login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
+    signup: NexusGenRootTypes['AuthPayload']; // AuthPayload!
   }
   Query: { // field return type
     ok: boolean; // Boolean!
@@ -99,16 +120,28 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  AuthPayload: { // field return type name
+    token: 'String'
+    user: 'User'
+  }
+  Feed: { // field return type name
+    count: 'Int'
+    id: 'ID'
+    links: 'Log'
+  }
   Log: { // field return type name
     date: 'DateTime'
     id: 'ID'
     metric: 'Metric'
-    newfield: 'String'
     postedBy: 'User'
   }
   Metric: { // field return type name
     name: 'String'
     value: 'Int'
+  }
+  Mutation: { // field return type name
+    login: 'AuthPayload'
+    signup: 'AuthPayload'
   }
   Query: { // field return type name
     ok: 'Boolean'
@@ -124,6 +157,18 @@ export interface NexusGenFieldTypeNames {
 }
 
 export interface NexusGenArgTypes {
+  Mutation: {
+    login: { // args
+      email: string; // String!
+      password: string; // String!
+    }
+    signup: { // args
+      email: string; // String!
+      name: string; // String!
+      password: string; // String!
+      surname: string; // String!
+    }
+  }
 }
 
 export interface NexusGenAbstractTypeMembers {
