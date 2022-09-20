@@ -1,7 +1,13 @@
+type Metric {
+  name: String!
+  value: Int!
+}
+
 type Log {
   id: ID!
   date: DateTime!
   postedBy: User!
+  metric: [Metric!]!
 }
 
 type User {
