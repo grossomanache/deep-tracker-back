@@ -47,6 +47,7 @@ export interface NexusGenObjects {
     date: NexusGenScalars['DateTime']; // DateTime!
     id: string; // ID!
     metric: NexusGenRootTypes['Metric'][]; // [Metric!]!
+    newfield: string; // String!
   }
   Metric: { // root type
     name: string; // String!
@@ -77,6 +78,7 @@ export interface NexusGenFieldTypes {
     date: NexusGenScalars['DateTime']; // DateTime!
     id: string; // ID!
     metric: NexusGenRootTypes['Metric'][]; // [Metric!]!
+    newfield: string; // String!
     postedBy: NexusGenRootTypes['User'] | null; // User
   }
   Metric: { // field return type
@@ -101,6 +103,7 @@ export interface NexusGenFieldTypeNames {
     date: 'DateTime'
     id: 'ID'
     metric: 'Metric'
+    newfield: 'String'
     postedBy: 'User'
   }
   Metric: { // field return type name
