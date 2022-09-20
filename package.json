@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "dev": "ts-node-dev --exit-child src/index.ts",
+    "transpile": "ts-node-dev --transpile-only --no-notify --exit-child src/schema",
+    "dev": "npm run transpile && ts-node-dev --exit-child src/index.ts",
     "start": "ts-node src/index.ts"
   },
   "devDependencies": {

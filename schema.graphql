@@ -8,7 +8,10 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 scalar DateTime
 
 type Log {
+  date: DateTime!
   id: ID!
+  metric: [Metric!]!
+  postedBy: User
 }
 
 type Metric {
@@ -18,4 +21,13 @@ type Metric {
 
 type Query {
   ok: Boolean!
+}
+
+type User {
+  email: String!
+  id: Int!
+  metrics: [Metric!]!
+  name: String!
+  password: String!
+  surname: String!
 }

@@ -44,13 +44,22 @@ export interface NexusGenScalars {
 
 export interface NexusGenObjects {
   Log: { // root type
+    date: NexusGenScalars['DateTime']; // DateTime!
     id: string; // ID!
+    metric: NexusGenRootTypes['Metric'][]; // [Metric!]!
   }
   Metric: { // root type
     name: string; // String!
     value: number; // Int!
   }
   Query: {};
+  User: { // root type
+    email: string; // String!
+    id: number; // Int!
+    name: string; // String!
+    password: string; // String!
+    surname: string; // String!
+  }
 }
 
 export interface NexusGenInterfaces {
@@ -65,7 +74,10 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
   Log: { // field return type
+    date: NexusGenScalars['DateTime']; // DateTime!
     id: string; // ID!
+    metric: NexusGenRootTypes['Metric'][]; // [Metric!]!
+    postedBy: NexusGenRootTypes['User'] | null; // User
   }
   Metric: { // field return type
     name: string; // String!
@@ -74,11 +86,22 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     ok: boolean; // Boolean!
   }
+  User: { // field return type
+    email: string; // String!
+    id: number; // Int!
+    metrics: NexusGenRootTypes['Metric'][]; // [Metric!]!
+    name: string; // String!
+    password: string; // String!
+    surname: string; // String!
+  }
 }
 
 export interface NexusGenFieldTypeNames {
   Log: { // field return type name
+    date: 'DateTime'
     id: 'ID'
+    metric: 'Metric'
+    postedBy: 'User'
   }
   Metric: { // field return type name
     name: 'String'
@@ -86,6 +109,14 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     ok: 'Boolean'
+  }
+  User: { // field return type name
+    email: 'String'
+    id: 'Int'
+    metrics: 'Metric'
+    name: 'String'
+    password: 'String'
+    surname: 'String'
   }
 }
 
