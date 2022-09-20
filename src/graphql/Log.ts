@@ -1,7 +1,14 @@
 import { objectType, extendType } from "nexus";
 import { resolve } from "path";
 import { NexusGenObjects } from "../../nexus-typegen";
-import { Metric } from "./Metric";
+
+export const Metric = objectType({
+  name: "Metric",
+  definition(t) {
+    t.nonNull.string("name");
+    t.nonNull.int("value");
+  },
+});
 
 export const Log = objectType({
   name: "Log",
