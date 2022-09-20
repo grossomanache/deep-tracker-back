@@ -1,13 +1,11 @@
-import { makeExecutableSchema } from "@graphql-tools/schema";
-import typeDefs from "./schema.graphql";
+import { makeSchema } from "nexus";
+import { join } from "path";
+import * as types from "./graphql";
 
-const resolvers = {
-  Query: {
-    info: () => "Test",
+export const schema = makeSchema({
+  types, // 1
+  outputs: {
+    schema: join(process.cwd(), "schema.graphql"), // 2
+    typegen: join(process.cwd(), "nexus-typegen.ts"), // 3
   },
-};
-
-export const schema = makeExecutableSchema({
-  typeDefs,
-  resolvers,
 });
