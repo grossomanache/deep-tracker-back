@@ -3,6 +3,8 @@ type Metric {
   value: Int!
 }
 
+scalar DateTime
+
 type Log {
   id: ID!
   date: DateTime!
@@ -17,4 +19,8 @@ type User {
   email: String!
   password: String!
   metrics: [Log!]!
+}
+
+type Query {
+  info: String!
 }
