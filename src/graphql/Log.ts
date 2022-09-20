@@ -1,4 +1,4 @@
-import { objectType, extendType } from "nexus";
+import { objectType, extendType, nonNull } from "nexus";
 import { resolve } from "path";
 import { NexusGenObjects } from "../../nexus-typegen";
 
