@@ -54,17 +54,14 @@ export const LogMutation = extendType({
 
       resolve(parent, args, context) {
         const { metrics } = args;
-        const { userId } = context;
+        const { currentUser } = context;
 
-        console.log(Object.keys(args));
-        console.log(Object.keys(context));
-
-        if (!userId) {
+        if (!currentUser) {
           throw new Error("Cannot post without logging in.");
         }
 
         const newLog = context.prisma.log.create({
-          data: { metrics, postedBy: { connect: { id: userId } } },
+          data: { metrics, postedBy: { connect: { id: 1 } } },
         });
         return newLog;
       },

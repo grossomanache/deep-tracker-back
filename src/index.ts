@@ -51,7 +51,7 @@ async function main() {
         request,
         schema,
         operationName,
-        contextFactory,
+        contextFactory: () => contextFactory(req),
         query: queryParams,
         variables,
       });
