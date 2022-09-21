@@ -1,9 +1,18 @@
-import { objectType, extendType, nonNull } from "nexus";
+import { objectType, extendType, nonNull, list, inputObjectType } from "nexus";
 import { resolve } from "path";
+import { listenerCount } from "process";
 import { NexusGenObjects } from "../../nexus-typegen";
 
 export const Metric = objectType({
   name: "Metric",
+  definition(t) {
+    t.nonNull.string("name");
+    t.nonNull.int("value");
+  },
+});
+
+export const MetricInputType = inputObjectType({
+  name: "MetricInputType",
   definition(t) {
     t.nonNull.string("name");
     t.nonNull.int("value");
@@ -30,8 +39,35 @@ export const Log = objectType({
 export const Feed = objectType({
   name: "Feed",
   definition(t) {
-    t.nonNull.list.nonNull.field("links", { type: Log });
+    t.nonNull.list.nonNull.field("logs", { type: Log });
     t.nonNull.int("count");
     t.id("id");
+  },
+});
+
+export const LogMutation = extendType({
+  type: "Mutation",
+  definition(t) {
+    t.nonNull.field("post", {
+      type: "Log",
+      args: { metrics: list(nonNull("MetricInputType")) },
+
+      resolve(parent, args, context) {
+        const { metrics } = args;
+        const { userId } = context;
+
+        console.log(Object.keys(args));
+        console.log(Object.keys(context));
+
+        if (!userId) {
+          throw new Error("Cannot post without logging in.");
+        }
+
+        const newLog = context.prisma.log.create({
+          data: { metrics, postedBy: { connect: { id: userId } } },
+        });
+        return newLog;
+      },
+    });
   },
 });

@@ -15,7 +15,7 @@ scalar DateTime
 type Feed {
   count: Int!
   id: ID
-  links: [Log!]!
+  logs: [Log!]!
 }
 
 type Log {
@@ -30,8 +30,14 @@ type Metric {
   value: Int!
 }
 
+input MetricInputType {
+  name: String!
+  value: Int!
+}
+
 type Mutation {
   login(email: String!, password: String!): AuthPayload!
+  post(metrics: [MetricInputType!]): Log!
   signup(email: String!, name: String!, password: String!, surname: String!): AuthPayload!
 }
 

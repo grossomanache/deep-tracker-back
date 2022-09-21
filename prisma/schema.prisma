@@ -10,20 +10,20 @@ generator client {
 }
 
 model Metric {
-  id    Int     @id @default(autoincrement())
-  name  String
-  value Int
-  log   Log     @relation(name:"Metric", fields:[loggedById], references: [id])
-  loggedById    Int
+  id           Int     @id @default(autoincrement())
+  name         String
+  value        Int
+  log          Log     @relation(name:"Metric", fields:[loggedById], references: [id])
+  loggedById   Int
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  surname   String
-  email     String   @unique
-  password  String
-  metrics   Log[]    @relation(name: "PostedBy")
+  id          Int      @id @default(autoincrement())
+  name        String
+  surname     String
+  email       String   @unique
+  password    String
+  metrics     Log[]    @relation(name: "PostedBy")
 }
 
 model Log {
