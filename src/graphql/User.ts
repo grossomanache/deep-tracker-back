@@ -9,12 +9,12 @@ export const User = objectType({
     t.nonNull.string("surname");
     t.nonNull.string("email");
     t.nonNull.string("password");
-    t.nonNull.list.nonNull.field("logs", {
-      type: "Log",
+    t.nonNull.list.nonNull.field("metrics", {
+      type: "Metric",
       resolve(parent, args, context) {
         return context.prisma.user
           .findUnique({ where: { id: parent.id } })
-          .logs();
+          .metrics();
       },
     });
   },

@@ -9,10 +9,11 @@ generator client {
 
 model Metric {
   id          Int      @id @default(autoincrement())
+  date        DateTime @default(now())
   name        String
   value       Float
-  log         Log     @relation(name: "Metric",  fields: [logId], references: [id])
-  logId       Int
+  postedBy    User     @relation(name: "PostedBy", fields: [postedById], references: [id])
+  postedById  Int
 }
 
 model User {
@@ -21,13 +22,5 @@ model User {
   surname     String
   email       String   @unique
   password    String
-  logs        Log[]    @relation(name: "PostedBy")
-}
-
-model Log {
-  id          Int      @id @default(autoincrement())
-  date        DateTime @default(now())
-  postedBy    User     @relation(name: "PostedBy", fields: [postedById], references: [id])
-  postedById  Int
-  metrics     Metric[]  @relation(name: "Metric")
+  metrics     Metric[]    @relation(name: "PostedBy")
 }

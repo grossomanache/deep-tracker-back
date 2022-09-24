@@ -12,21 +12,11 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
-type Feed {
-  count: Int!
-  id: ID
-  logs: [Log!]!
-}
-
-type Log {
+type Metric {
   date: DateTime!
   id: ID!
-  metric: [Metric!]!
-  postedBy: User
-}
-
-type Metric {
   name: String!
+  postedBy: User
   value: Int!
 }
 
@@ -35,9 +25,13 @@ input MetricInputType {
   value: Int!
 }
 
+type Metrics {
+  metrics: [Metric!]!
+}
+
 type Mutation {
   login(email: String!, password: String!): AuthPayload!
-  post(metrics: [MetricInputType!]): Log!
+  post(metrics: [MetricInputType!]): Metrics!
   signup(email: String!, name: String!, password: String!, surname: String!): AuthPayload!
 }
 
@@ -48,7 +42,7 @@ type Query {
 type User {
   email: String!
   id: Int!
-  logs: [Log!]!
+  metrics: [Metric!]!
   name: String!
   password: String!
   surname: String!
