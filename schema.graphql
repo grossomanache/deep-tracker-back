@@ -48,7 +48,7 @@ type Query {
 type User {
   email: String!
   id: Int!
-  metrics: [Metric!]!
+  logs: [Log!]!
   name: String!
   password: String!
   surname: String!

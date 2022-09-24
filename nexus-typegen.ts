@@ -117,7 +117,7 @@ export interface NexusGenFieldTypes {
   User: { // field return type
     email: string; // String!
     id: number; // Int!
-    metrics: NexusGenRootTypes['Metric'][]; // [Metric!]!
+    logs: NexusGenRootTypes['Log'][]; // [Log!]!
     name: string; // String!
     password: string; // String!
     surname: string; // String!
@@ -155,7 +155,7 @@ export interface NexusGenFieldTypeNames {
   User: { // field return type name
     email: 'String'
     id: 'Int'
-    metrics: 'Metric'
+    logs: 'Log'
     name: 'String'
     password: 'String'
     surname: 'String'

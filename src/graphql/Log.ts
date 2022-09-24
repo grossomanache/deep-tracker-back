@@ -52,7 +52,7 @@ export const LogMutation = extendType({
       type: "Log",
       args: { metrics: list(nonNull("MetricInputType")) },
 
-      resolve(parent, args, context) {
+      async resolve(parent, args, context) {
         const { metrics } = args;
         const { currentUser } = context;
 
@@ -60,9 +60,17 @@ export const LogMutation = extendType({
           throw new Error("Cannot post without logging in.");
         }
 
-        const newLog = context.prisma.log.create({
-          data: { metrics, postedBy: { connect: { id: 1 } } },
+        const newLog = await context.prisma.log.create({
+          data: { postedBy: { connect: { id: currentUser.id } } },
         });
+
+        if (metrics) {
+          metrics.forEach(metric => {
+            const loggedMetric
+          context.prisma.metric.create({data: })
+        });}
+
+        console.log(newLog);
         return newLog;
       },
     });

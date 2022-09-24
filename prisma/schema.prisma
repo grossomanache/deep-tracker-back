@@ -11,8 +11,8 @@ model Metric {
   id          Int      @id @default(autoincrement())
   name        String
   value       Float
-  log         Log     @relation(name: "Metric",  fields: [loggedById], references: [id])
-  loggedById  Int
+  log         Log     @relation(name: "Metric",  fields: [logId], references: [id])
+  logId       Int
 }
 
 model User {
@@ -21,7 +21,7 @@ model User {
   surname     String
   email       String   @unique
   password    String
-  metrics     Log[]    @relation(name: "PostedBy")
+  logs        Log[]    @relation(name: "PostedBy")
 }
 
 model Log {
