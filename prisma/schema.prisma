@@ -1,20 +1,18 @@
-// 1
 datasource db {
   provider = "sqlite"
   url      = "file:./dev.db"
 }
 
-// 2
 generator client {
   provider = "prisma-client-js"
 }
 
 model Metric {
-  id           Int     @id @default(autoincrement())
-  name         String
-  value        Int
-  log          Log     @relation(name:"Metric", fields:[loggedById], references: [id])
-  loggedById   Int
+  id          Int      @id @default(autoincrement())
+  name        String
+  value       Float
+  log         Log     @relation(name: "Metric",  fields: [loggedById], references: [id])
+  loggedById  Int
 }
 
 model User {
@@ -31,5 +29,5 @@ model Log {
   date        DateTime @default(now())
   postedBy    User     @relation(name: "PostedBy", fields: [postedById], references: [id])
   postedById  Int
-  metrics     Metric[] @relation(name:"Metric")
+  metrics     Metric[]  @relation(name: "Metric")
 }
