@@ -54,7 +54,7 @@ export const MetricMutation = extendType({
           throw new Error("Cannot post without logging in.");
         }
 
-        const createdMetrics: Prisma.Prisma__MetricClient<any>[] = [];
+        const newMetrics: Prisma.Prisma__MetricClient<any>[] = [];
 
         if (metrics) {
           metrics.forEach((metric) => {
@@ -66,11 +66,11 @@ export const MetricMutation = extendType({
                 postedBy: { connect: { id: currentUser.id } },
               },
             });
-            createdMetrics.push(createdMetric);
+            newMetrics.push(createdMetric);
           });
         }
 
-        return { metrics: createdMetrics };
+        return { metrics: newMetrics };
       },
     });
   },
