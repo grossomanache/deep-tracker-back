@@ -1,7 +1,10 @@
 import { objectType, extendType, nonNull, list, inputObjectType } from "nexus";
+import { Prisma, prisma } from "@prisma/client";
 import { resolve } from "path";
 import { listenerCount } from "process";
 import { NexusGenObjects } from "../../nexus-typegen";
+import { GraphQLContext } from "../context";
+import { NexusObjectTypeDef } from "nexus/dist/core";
 
 export const Metric = objectType({
   name: "Metric",
@@ -43,7 +46,7 @@ export const MetricMutation = extendType({
       type: "Metrics",
       args: { metrics: list(nonNull("MetricInputType")) },
 
-      resolve(parent, args, context) {
+      resolve(parent, args, context: GraphQLContext) {
         const { metrics } = args;
         const { currentUser } = context;
 
@@ -51,26 +54,19 @@ export const MetricMutation = extendType({
           throw new Error("Cannot post without logging in.");
         }
 
-        const createdMetrics = [];
-        const fakeLog = {
-          id: "1",
-          date: Date.now(),
-          name: "fakeDeep",
-          value: 100,
-          postedBy: currentUser,
-        };
+        const createdMetrics: Prisma.Prisma__MetricClient<any>[] = [];
+
         if (metrics) {
           metrics.forEach((metric) => {
             const { name, value } = metric;
-            const loggedMetric = context.prisma.metric.create({
+            const createdMetric = context.prisma.metric.create({
               data: {
                 name,
                 value,
                 postedBy: { connect: { id: currentUser.id } },
               },
             });
-            console.log(loggedMetric);
-            createdMetrics.push(loggedMetric);
+            createdMetrics.push(createdMetric);
           });
         }
 
