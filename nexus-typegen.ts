@@ -28,6 +28,10 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  MetricInputType: { // input type
+    name: string; // String!
+    value: number; // Int!
+  }
 }
 
 export interface NexusGenEnums {
@@ -47,19 +51,14 @@ export interface NexusGenObjects {
     token: string; // String!
     user: NexusGenRootTypes['User']; // User!
   }
-  Feed: { // root type
-    count: number; // Int!
-    id?: string | null; // ID
-    links: NexusGenRootTypes['Log'][]; // [Log!]!
-  }
-  Log: { // root type
+  Metric: { // root type
     date: NexusGenScalars['DateTime']; // DateTime!
     id: string; // ID!
-    metric: NexusGenRootTypes['Metric'][]; // [Metric!]!
-  }
-  Metric: { // root type
     name: string; // String!
     value: number; // Int!
+  }
+  Metrics: { // root type
+    metrics: NexusGenRootTypes['Metric'][]; // [Metric!]!
   }
   Mutation: {};
   Query: {};
@@ -87,23 +86,19 @@ export interface NexusGenFieldTypes {
     token: string; // String!
     user: NexusGenRootTypes['User']; // User!
   }
-  Feed: { // field return type
-    count: number; // Int!
-    id: string | null; // ID
-    links: NexusGenRootTypes['Log'][]; // [Log!]!
-  }
-  Log: { // field return type
+  Metric: { // field return type
     date: NexusGenScalars['DateTime']; // DateTime!
     id: string; // ID!
-    metric: NexusGenRootTypes['Metric'][]; // [Metric!]!
-    postedBy: NexusGenRootTypes['User'] | null; // User
-  }
-  Metric: { // field return type
     name: string; // String!
+    postedBy: NexusGenRootTypes['User'] | null; // User
     value: number; // Int!
+  }
+  Metrics: { // field return type
+    metrics: NexusGenRootTypes['Metric'][]; // [Metric!]!
   }
   Mutation: { // field return type
     login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
+    post: NexusGenRootTypes['Metrics']; // Metrics!
     signup: NexusGenRootTypes['AuthPayload']; // AuthPayload!
   }
   Query: { // field return type
@@ -124,23 +119,19 @@ export interface NexusGenFieldTypeNames {
     token: 'String'
     user: 'User'
   }
-  Feed: { // field return type name
-    count: 'Int'
-    id: 'ID'
-    links: 'Log'
-  }
-  Log: { // field return type name
+  Metric: { // field return type name
     date: 'DateTime'
     id: 'ID'
-    metric: 'Metric'
-    postedBy: 'User'
-  }
-  Metric: { // field return type name
     name: 'String'
+    postedBy: 'User'
     value: 'Int'
+  }
+  Metrics: { // field return type name
+    metrics: 'Metric'
   }
   Mutation: { // field return type name
     login: 'AuthPayload'
+    post: 'Metrics'
     signup: 'AuthPayload'
   }
   Query: { // field return type name
@@ -162,6 +153,9 @@ export interface NexusGenArgTypes {
       email: string; // String!
       password: string; // String!
     }
+    post: { // args
+      metrics?: NexusGenInputs['MetricInputType'][] | null; // [MetricInputType!]
+    }
     signup: { // args
       email: string; // String!
       name: string; // String!
@@ -179,7 +173,7 @@ export interface NexusGenTypeInterfaces {
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
 
-export type NexusGenInputNames = never;
+export type NexusGenInputNames = keyof NexusGenInputs;
 
 export type NexusGenEnumNames = never;
 
