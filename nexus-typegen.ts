@@ -116,6 +116,9 @@ export interface NexusGenFieldTypes {
     post: NexusGenRootTypes['Metrics']; // Metrics!
     signup: NexusGenRootTypes['AuthPayload']; // AuthPayload!
   }
+  Query: { // field return type
+    feed: NexusGenRootTypes['Feed']; // Feed!
+  }
   User: { // field return type
     email: string; // String!
     id: number; // Int!
@@ -151,6 +154,9 @@ export interface NexusGenFieldTypeNames {
     post: 'Metrics'
     signup: 'AuthPayload'
   }
+  Query: { // field return type name
+    feed: 'Feed'
+  }
   User: { // field return type name
     email: 'String'
     id: 'Int'
@@ -175,6 +181,14 @@ export interface NexusGenArgTypes {
       name: string; // String!
       password: string; // String!
       surname: string; // String!
+    }
+  }
+  Query: {
+    feed: { // args
+      filterByName?: string | null; // String
+      orderBy?: NexusGenInputs['LinkOrderByInput'][] | null; // [LinkOrderByInput!]
+      skip?: number | null; // Int
+      take?: number | null; // Int
     }
   }
 }

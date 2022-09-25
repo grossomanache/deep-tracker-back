@@ -4,7 +4,13 @@ import { resolve } from "path";
 import { listenerCount } from "process";
 import { NexusGenObjects } from "../../nexus-typegen";
 import { GraphQLContext } from "../context";
-import { enumType, NexusObjectTypeDef } from "nexus/dist/core";
+import {
+  arg,
+  enumType,
+  intArg,
+  NexusObjectTypeDef,
+  stringArg,
+} from "nexus/dist/core";
 
 export const Metric = objectType({
   name: "Metric",
@@ -50,7 +56,37 @@ export const MetricInputType = inputObjectType({
 
 export const MetricQuery = extendType({
   type: "Query",
-  definition(t) {},
+  definition(t) {
+    t.nonNull.field("feed", {
+      type: "Feed",
+      args: {
+        filterByName: stringArg(),
+        skip: intArg(),
+        take: intArg(),
+        orderBy: arg({ type: list(nonNull(MetricOrderByInput)) }),
+      },
+      async resolve(parent, args, context, info) {
+        const { filterByName } = args;
+        const where = filterByName ? { name: { contains: filterByName } } : {};
+        const metrics = await context.prisma.metric.findMany({
+          where,
+          skip: args?.skip as number | undefined,
+          take: args?.take as number | undefined,
+          orderBy: args?.orderBy as
+            | Prisma.Enumerable<Prisma.MetricOrderByWithRelationInput>
+            | undefined,
+        });
+        const count = await context.prisma.metric.count({ where });
+        const id = `main-feed:${JSON.stringify(args)}`;
+
+        return {
+          metrics,
+          count,
+          id,
+        };
+      },
+    });
+  },
 });
 
 export const MetricMutation = extendType({
