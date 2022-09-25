@@ -4,7 +4,13 @@ import { resolve } from "path";
 import { listenerCount } from "process";
 import { NexusGenObjects } from "../../nexus-typegen";
 import { GraphQLContext } from "../context";
-import { NexusObjectTypeDef } from "nexus/dist/core";
+import {
+  arg,
+  enumType,
+  intArg,
+  NexusObjectTypeDef,
+  stringArg,
+} from "nexus/dist/core";
 
 export const Metric = objectType({
   name: "Metric",
@@ -31,11 +37,58 @@ export const Metrics = objectType({
   },
 });
 
+export const Feed = objectType({
+  name: "Feed",
+  definition(t) {
+    t.nonNull.list.nonNull.field("metrics", { type: Metric });
+    t.nonNull.int("count");
+    t.id("id");
+  },
+});
+
 export const MetricInputType = inputObjectType({
   name: "MetricInputType",
   definition(t) {
     t.nonNull.string("name");
     t.nonNull.int("value");
+  },
+});
+
+export const MetricQuery = extendType({
+  type: "Query",
+  definition(t) {
+    t.nonNull.field("feed", {
+      type: "Feed",
+      args: {
+        filterByName: stringArg(),
+        skip: intArg(),
+        take: intArg(),
+        orderBy: arg({ type: list(nonNull(MetricOrderByInput)) }),
+      },
+      async resolve(parent, args, context, info) {
+        const { filterByName } = args;
+        const { currentUser } = context;
+        const where = filterByName
+          ? { name: { contains: filterByName }, postedBy: currentUser }
+          : { postedBy: currentUser };
+        const metrics = await context.prisma.metric.findMany({
+          where,
+          skip: args?.skip as number | undefined,
+          take: args?.take as number | undefined,
+          orderBy: args?.orderBy as
+            | Prisma.Enumerable<Prisma.MetricOrderByWithRelationInput>
+            | undefined,
+        });
+        const count = await context.prisma.metric.count({ where });
+        const id = `main-feed:${JSON.stringify(args)}`;
+
+        return {
+          metrics,
+          count,
+          id,
+        };
+      },
+    });
   },
 });
 
@@ -74,4 +127,17 @@ export const MetricMutation = extendType({
       },
     });
   },
+});
+
+export const MetricOrderByInput = inputObjectType({
+  name: "MetricOrderByInput",
+  definition(t) {
+    t.field("name", { type: Sort });
+    t.field("date", { type: Sort });
+  },
+});
+
+export const Sort = enumType({
+  name: "Sort",
+  members: ["asc", "desc"],
 });
