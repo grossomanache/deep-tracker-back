@@ -67,7 +67,10 @@ export const MetricQuery = extendType({
       },
       async resolve(parent, args, context, info) {
         const { filterByName } = args;
-        const where = filterByName ? { name: { contains: filterByName } } : {};
+        const { currentUser } = context;
+        const where = filterByName
+          ? { name: { contains: filterByName }, postedBy: currentUser }
+          : { postedBy: currentUser };
         const metrics = await context.prisma.metric.findMany({
           where,
           skip: args?.skip as number | undefined,
