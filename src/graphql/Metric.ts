@@ -72,6 +72,7 @@ export const MetricQuery = extendType({
         if (!currentUser) {
           throw new Error("Cannot retrieve metrics without logging in.");
         }
+
         const where = {
           postedBy: currentUser,
           name: { contains: filterByName ?? "" },
@@ -148,7 +149,7 @@ export const MetricMutation = extendType({
         });
 
         if (!metricToBeDeleted) {
-          throw new Error("Metric to be deleted doesn't exist");
+          throw new Error("Metric id to be deleted doesn't exist");
         }
 
         if (metricToBeDeleted.postedById !== currentUser.id) {
