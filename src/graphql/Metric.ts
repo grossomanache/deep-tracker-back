@@ -68,9 +68,15 @@ export const MetricQuery = extendType({
       async resolve(parent, args, context, info) {
         const { filterByName } = args;
         const { currentUser } = context;
-        const where = filterByName
-          ? { name: { contains: filterByName }, postedBy: currentUser }
-          : { postedBy: currentUser };
+
+        if (!currentUser) {
+          throw new Error("Cannot retrieve metrics without logging in.");
+        }
+        const where = {
+          postedBy: currentUser,
+          name: { contains: filterByName ?? "" },
+        };
+
         const metrics = await context.prisma.metric.findMany({
           where,
           skip: args?.skip as number | undefined,
