@@ -126,6 +126,36 @@ export const MetricMutation = extendType({
         return { metrics: newMetrics };
       },
     });
+    t.nonNull.field("deleteMetric", {
+      type: "Metric",
+      args: { id: nonNull(intArg()) },
+      async resolve(parent, args, context) {
+        const { id } = args;
+        const { currentUser } = context;
+
+        if (!currentUser) {
+          throw new Error("Cannot delete without logging in.");
+        }
+
+        const metricToBeDeleted = await context.prisma.metric.findUnique({
+          where: { id },
+        });
+
+        if (!metricToBeDeleted) {
+          throw new Error("Metric to be deleted doesn't exist");
+        }
+
+        if (metricToBeDeleted.postedById !== currentUser.id) {
+          throw new Error("Metric doesn't correspond to logged in user");
+        }
+
+        const deletedMetric = context.prisma.metric.delete({
+          where: { id },
+        });
+
+        return deletedMetric;
+      },
+    });
   },
 });
 

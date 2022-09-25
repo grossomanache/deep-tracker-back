@@ -41,6 +41,7 @@ type Metrics {
 }
 
 type Mutation {
+  deleteMetric(id: Int!): Metric!
   login(email: String!, password: String!): AuthPayload!
   post(metrics: [MetricInputType!]): Metrics!
   signup(email: String!, name: String!, password: String!, surname: String!): AuthPayload!

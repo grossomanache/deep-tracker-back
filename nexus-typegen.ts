@@ -112,6 +112,7 @@ export interface NexusGenFieldTypes {
     metrics: NexusGenRootTypes['Metric'][]; // [Metric!]!
   }
   Mutation: { // field return type
+    deleteMetric: NexusGenRootTypes['Metric']; // Metric!
     login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     post: NexusGenRootTypes['Metrics']; // Metrics!
     signup: NexusGenRootTypes['AuthPayload']; // AuthPayload!
@@ -150,6 +151,7 @@ export interface NexusGenFieldTypeNames {
     metrics: 'Metric'
   }
   Mutation: { // field return type name
+    deleteMetric: 'Metric'
     login: 'AuthPayload'
     post: 'Metrics'
     signup: 'AuthPayload'
@@ -169,6 +171,9 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    deleteMetric: { // args
+      id: number; // Int!
+    }
     login: { // args
       email: string; // String!
       password: string; // String!
