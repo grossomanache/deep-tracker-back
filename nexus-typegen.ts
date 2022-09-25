@@ -28,13 +28,13 @@ declare global {
 }
 
 export interface NexusGenInputs {
-  LinkOrderByInput: { // input type
-    date?: NexusGenEnums['Sort'] | null; // Sort
-    name?: NexusGenEnums['Sort'] | null; // Sort
-  }
   MetricInputType: { // input type
     name: string; // String!
     value: number; // Int!
+  }
+  MetricOrderByInput: { // input type
+    date?: NexusGenEnums['Sort'] | null; // Sort
+    name?: NexusGenEnums['Sort'] | null; // Sort
   }
 }
 
@@ -186,7 +186,7 @@ export interface NexusGenArgTypes {
   Query: {
     feed: { // args
       filterByName?: string | null; // String
-      orderBy?: NexusGenInputs['LinkOrderByInput'][] | null; // [LinkOrderByInput!]
+      orderBy?: NexusGenInputs['MetricOrderByInput'][] | null; // [MetricOrderByInput!]
       skip?: number | null; // Int
       take?: number | null; // Int
     }

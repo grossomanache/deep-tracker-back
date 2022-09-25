@@ -130,7 +130,7 @@ export const MetricMutation = extendType({
 });
 
 export const MetricOrderByInput = inputObjectType({
-  name: "LinkOrderByInput",
+  name: "MetricOrderByInput",
   definition(t) {
     t.field("name", { type: Sort });
     t.field("date", { type: Sort });
