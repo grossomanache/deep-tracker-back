@@ -12,6 +12,17 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
+type Feed {
+  count: Int!
+  id: ID
+  metrics: [Metric!]!
+}
+
+input LinkOrderByInput {
+  date: Sort
+  name: Sort
+}
+
 type Metric {
   date: DateTime!
   id: ID!
@@ -35,8 +46,11 @@ type Mutation {
   signup(email: String!, name: String!, password: String!, surname: String!): AuthPayload!
 }
 
-type Query {
-  ok: Boolean!
+type Query
+
+enum Sort {
+  asc
+  desc
 }
 
 type User {

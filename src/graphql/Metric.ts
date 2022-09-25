@@ -4,7 +4,7 @@ import { resolve } from "path";
 import { listenerCount } from "process";
 import { NexusGenObjects } from "../../nexus-typegen";
 import { GraphQLContext } from "../context";
-import { NexusObjectTypeDef } from "nexus/dist/core";
+import { enumType, NexusObjectTypeDef } from "nexus/dist/core";
 
 export const Metric = objectType({
   name: "Metric",
@@ -31,12 +31,26 @@ export const Metrics = objectType({
   },
 });
 
+export const Feed = objectType({
+  name: "Feed",
+  definition(t) {
+    t.nonNull.list.nonNull.field("metrics", { type: Metric });
+    t.nonNull.int("count");
+    t.id("id");
+  },
+});
+
 export const MetricInputType = inputObjectType({
   name: "MetricInputType",
   definition(t) {
     t.nonNull.string("name");
     t.nonNull.int("value");
   },
+});
+
+export const MetricQuery = extendType({
+  type: "Query",
+  definition(t) {},
 });
 
 export const MetricMutation = extendType({
@@ -74,4 +88,17 @@ export const MetricMutation = extendType({
       },
     });
   },
+});
+
+export const MetricOrderByInput = inputObjectType({
+  name: "LinkOrderByInput",
+  definition(t) {
+    t.field("name", { type: Sort });
+    t.field("date", { type: Sort });
+  },
+});
+
+export const Sort = enumType({
+  name: "Sort",
+  members: ["asc", "desc"],
 });

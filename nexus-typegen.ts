@@ -28,6 +28,10 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  LinkOrderByInput: { // input type
+    date?: NexusGenEnums['Sort'] | null; // Sort
+    name?: NexusGenEnums['Sort'] | null; // Sort
+  }
   MetricInputType: { // input type
     name: string; // String!
     value: number; // Int!
@@ -35,6 +39,7 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
+  Sort: "asc" | "desc"
 }
 
 export interface NexusGenScalars {
@@ -50,6 +55,11 @@ export interface NexusGenObjects {
   AuthPayload: { // root type
     token: string; // String!
     user: NexusGenRootTypes['User']; // User!
+  }
+  Feed: { // root type
+    count: number; // Int!
+    id?: string | null; // ID
+    metrics: NexusGenRootTypes['Metric'][]; // [Metric!]!
   }
   Metric: { // root type
     date: NexusGenScalars['DateTime']; // DateTime!
@@ -79,12 +89,17 @@ export interface NexusGenUnions {
 
 export type NexusGenRootTypes = NexusGenObjects
 
-export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
+export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums
 
 export interface NexusGenFieldTypes {
   AuthPayload: { // field return type
     token: string; // String!
     user: NexusGenRootTypes['User']; // User!
+  }
+  Feed: { // field return type
+    count: number; // Int!
+    id: string | null; // ID
+    metrics: NexusGenRootTypes['Metric'][]; // [Metric!]!
   }
   Metric: { // field return type
     date: NexusGenScalars['DateTime']; // DateTime!
@@ -101,9 +116,6 @@ export interface NexusGenFieldTypes {
     post: NexusGenRootTypes['Metrics']; // Metrics!
     signup: NexusGenRootTypes['AuthPayload']; // AuthPayload!
   }
-  Query: { // field return type
-    ok: boolean; // Boolean!
-  }
   User: { // field return type
     email: string; // String!
     id: number; // Int!
@@ -119,6 +131,11 @@ export interface NexusGenFieldTypeNames {
     token: 'String'
     user: 'User'
   }
+  Feed: { // field return type name
+    count: 'Int'
+    id: 'ID'
+    metrics: 'Metric'
+  }
   Metric: { // field return type name
     date: 'DateTime'
     id: 'ID'
@@ -133,9 +150,6 @@ export interface NexusGenFieldTypeNames {
     login: 'AuthPayload'
     post: 'Metrics'
     signup: 'AuthPayload'
-  }
-  Query: { // field return type name
-    ok: 'Boolean'
   }
   User: { // field return type name
     email: 'String'
@@ -175,7 +189,7 @@ export type NexusGenObjectNames = keyof NexusGenObjects;
 
 export type NexusGenInputNames = keyof NexusGenInputs;
 
-export type NexusGenEnumNames = never;
+export type NexusGenEnumNames = keyof NexusGenEnums;
 
 export type NexusGenInterfaceNames = never;
 
