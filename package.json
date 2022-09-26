@@ -1,12 +1,15 @@
 {
   "scripts": {
     "dev": "ts-node-dev --transpile-only --no-notify --exit-child src/index.ts",
-    "start": "ts-node src/index.ts",
+    "start": "ts-node --transpile-only src/index.ts",
     "generate": "ts-node --transpile-only src/index.ts",
     "test": "npm run generate && jest",
     "test-coverage": "jest --coverage --watchAll=false --passWithNoTests=true",
     "personal-test": "jest --coverage --watchAll=true",
-    "build": "npm install && prisma generate"
+    "build": "npm install && prisma generate",
+    "alternate-build": "npm install && prisma generate && tsc",
+    "original-start": "ts-node src/index.ts",
+    "alternate-start": "node dist/src/index.js"
   },
   "devDependencies": {
     "@types/jest": "^29.0.3",
