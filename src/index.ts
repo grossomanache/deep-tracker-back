@@ -61,8 +61,8 @@ async function main() {
   });
 
   const port = process.env.PORT || 3000;
-  server.listen({ port, host: "0.0.0.0" }, () => {
-    console.log(`Server is running on http://localhost:3000/`);
+  server.listen({ port }).then((url) => {
+    console.log(`🚀  Server ready at ${url}`);
   });
 }
 
