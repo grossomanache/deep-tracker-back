@@ -6,7 +6,7 @@
     "test": "npm run generate && jest",
     "test-coverage": "jest --coverage --watchAll=false --passWithNoTests=true",
     "personal-test": "jest --coverage --watchAll=true",
-    "build": "npm install && prisma generate && npm run generate"
+    "build": "npm install && prisma generate"
   },
   "devDependencies": {
     "@types/jest": "^29.0.3",
