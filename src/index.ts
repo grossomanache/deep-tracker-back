@@ -12,11 +12,15 @@ import {
   renderGraphiQL,
   shouldRenderGraphiQL,
 } from "graphql-helix";
+import cors from "@fastify/cors";
+import { acceptedCors } from "./utils/corsOptions";
 
 export const prisma = new PrismaClient();
 
 async function main() {
   const server = fastify();
+
+  await server.register(cors, acceptedCors);
 
   server.route({
     method: ["POST", "GET"],
