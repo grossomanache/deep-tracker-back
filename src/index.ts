@@ -14,6 +14,7 @@ import {
   shouldRenderGraphiQL,
 } from "graphql-helix";
 import { acceptedCors } from "./utils/corsOptions";
+import { schemaRemover } from "./utils/schemaRemover";
 
 export const prisma = new PrismaClient();
 
@@ -65,7 +66,7 @@ async function main() {
         variables,
       });
 
-      if (origin?.replace("http://", "") === host) {
+      if (origin && schemaRemover(origin) === host) {
         sendResult(result, reply.raw);
       } else {
         reply.send(result);
