@@ -11,6 +11,7 @@ import {
   NexusObjectTypeDef,
   stringArg,
 } from "nexus/dist/core";
+import { CountryCodeResolver } from "graphql-scalars";
 
 export const Metric = objectType({
   name: "Metric",

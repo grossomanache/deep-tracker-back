@@ -41,35 +41,19 @@ async function main() {
         body,
       };
 
-      if (shouldRenderGraphiQL(request)) {
-        reply.header("Content-Type", "text/html");
-        reply.send(
-          renderGraphiQL({
-            endpoint: "/graphql",
-          })
-        );
-        return;
-      }
-
-      const {
-        operationName,
-        query: queryParams,
-        variables,
-      } = getGraphQLParameters(request);
+      const { query: queryParams } = getGraphQLParameters(request);
 
       const result = await processRequest({
         request,
         schema,
-        operationName,
         contextFactory: () => contextFactory(req),
         query: queryParams,
-        variables,
       });
 
       if (origin && schemaRemover(origin) === host) {
         sendResult(result, reply.raw);
       } else {
-        reply.send(result);
+        reply.send(result.payload);
       }
     },
   });
