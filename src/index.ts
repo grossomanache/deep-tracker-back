@@ -2,6 +2,7 @@ import "graphql-import-node";
 import { execute, parse } from "graphql";
 import { schema } from "./schema";
 import fastify from "fastify";
+import cors from "@fastify/cors";
 import { PrismaClient } from "@prisma/client";
 import { contextFactory } from "./context";
 import {
@@ -12,7 +13,6 @@ import {
   renderGraphiQL,
   shouldRenderGraphiQL,
 } from "graphql-helix";
-import cors from "@fastify/cors";
 import { acceptedCors } from "./utils/corsOptions";
 
 export const prisma = new PrismaClient();
@@ -20,13 +20,19 @@ export const prisma = new PrismaClient();
 async function main() {
   const server = fastify();
 
-  await server.register(cors, acceptedCors);
+  server.register(cors, acceptedCors);
 
   server.route({
     method: ["POST", "GET"],
     url: "/graphql",
     handler: async (req, reply) => {
-      const { headers, method, query, body } = req;
+      const {
+        headers,
+        method,
+        query,
+        body,
+        headers: { host, origin },
+      } = req;
       const request: Request = {
         headers,
         method,
@@ -41,7 +47,6 @@ async function main() {
             endpoint: "/graphql",
           })
         );
-
         return;
       }
 
@@ -60,7 +65,11 @@ async function main() {
         variables,
       });
 
-      sendResult(result, reply.raw);
+      if (origin?.replace("http://", "") === host) {
+        sendResult(result, reply.raw);
+      } else {
+        reply.send(result);
+      }
     },
   });
 
