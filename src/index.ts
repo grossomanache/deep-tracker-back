@@ -41,6 +41,17 @@ async function main() {
         body,
       };
 
+      if (shouldRenderGraphiQL(request)) {
+        reply.header("Content-Type", "text/html");
+        reply.send(renderGraphiQL());
+        reply.send(
+          renderGraphiQL({
+            endpoint: "/graphql",
+          })
+        );
+        return;
+      }
+
       const { query: queryParams } = getGraphQLParameters(request);
 
       const result = await processRequest({
@@ -50,15 +61,18 @@ async function main() {
         query: queryParams,
       });
 
+      console.log(result);
+
       if (origin && schemaRemover(origin) === host) {
         sendResult(result, reply.raw);
       } else {
+        //sendResult(result, reply);
         reply.send(result.payload);
       }
     },
   });
 
-  const port = process.env.PORT || 3000;
+  const port = 1 * process.env.PORT || 3000;
   server.listen({ port }).then((url) => {
     console.log(`🚀  Server ready at ${url}`);
   });
