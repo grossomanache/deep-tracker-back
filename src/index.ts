@@ -1,5 +1,5 @@
 import "graphql-import-node";
-import { execute, parse } from "graphql";
+import { execute, parse, responsePathAsArray } from "graphql";
 import { schema } from "./schema";
 import fastify from "fastify";
 import cors from "@fastify/cors";
@@ -12,6 +12,9 @@ import {
   Request,
   renderGraphiQL,
   shouldRenderGraphiQL,
+  sendResponseResult,
+  sendPushResult,
+  sendMultipartResponseResult,
 } from "graphql-helix";
 import { acceptedCors } from "./utils/corsOptions";
 import { schemaRemover } from "./utils/schemaRemover";
@@ -62,11 +65,7 @@ async function main() {
         variables,
       });
 
-      if (origin && schemaRemover(origin) === host) {
-        sendResult(result, reply.raw);
-      } else {
-        reply.send(result.payload);
-      }
+      reply.send(result.payload);
     },
   });
 
