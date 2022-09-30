@@ -52,27 +52,25 @@ async function main() {
         return;
       }
 
-      const { query: queryParams } = getGraphQLParameters(request);
+      const { query: queryParams, variables } = getGraphQLParameters(request);
 
       const result = await processRequest({
         request,
         schema,
         contextFactory: () => contextFactory(req),
         query: queryParams,
+        variables,
       });
-
-      console.log(result);
 
       if (origin && schemaRemover(origin) === host) {
         sendResult(result, reply.raw);
       } else {
-        //sendResult(result, reply);
         reply.send(result.payload);
       }
     },
   });
 
-  const port = 1 * process.env.PORT || 3000;
+  const port = process.env.PORT || 3000;
   server.listen({ port }).then((url) => {
     console.log(`🚀  Server ready at ${url}`);
   });
