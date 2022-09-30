@@ -75,7 +75,8 @@ async function main() {
           variables,
         });
 
-      //sendResult(result, reply);
+      //sendResult(result, reply); -> Commented until sendResult function is fixed
+      //sendResult(result, reply.raw) -> CORS headers aren't passed to reply
       reply.code(200).send(result.payload);
     },
   });
