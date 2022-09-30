@@ -1,10 +1,10 @@
 import "graphql-import-node";
-import { execute, parse } from "graphql";
+import { execute, parse, responsePathAsArray } from "graphql";
 import { schema } from "./schema";
 import fastify from "fastify";
 import cors from "@fastify/cors";
 import { PrismaClient } from "@prisma/client";
-import { contextFactory } from "./context";
+import { contextFactory, GraphQLContext } from "./context";
 import {
   getGraphQLParameters,
   sendResult,
@@ -12,6 +12,13 @@ import {
   Request,
   renderGraphiQL,
   shouldRenderGraphiQL,
+  sendResponseResult,
+  sendPushResult,
+  sendMultipartResponseResult,
+  Result,
+  ProcessRequestResult,
+  Response,
+  MultipartResponse,
 } from "graphql-helix";
 import { acceptedCors } from "./utils/corsOptions";
 import { schemaRemover } from "./utils/schemaRemover";
@@ -41,20 +48,36 @@ async function main() {
         body,
       };
 
-      const { query: queryParams } = getGraphQLParameters(request);
-
-      const result = await processRequest({
-        request,
-        schema,
-        contextFactory: () => contextFactory(req),
-        query: queryParams,
-      });
-
-      if (origin && schemaRemover(origin) === host) {
-        sendResult(result, reply.raw);
-      } else {
-        reply.send(result.payload);
+      if (shouldRenderGraphiQL(request)) {
+        reply.header("Content-Type", "text/html");
+        reply.send(renderGraphiQL());
+        reply.send(
+          renderGraphiQL({
+            endpoint: "/graphql",
+          })
+        );
+        return;
       }
+
+      const {
+        query: queryParams,
+        variables,
+        operationName,
+      } = getGraphQLParameters(request);
+
+      const result: ProcessRequestResult<GraphQLContext, any> =
+        await processRequest({
+          request,
+          schema,
+          operationName,
+          contextFactory: () => contextFactory(req),
+          query: queryParams,
+          variables,
+        });
+
+      //sendResult(result, reply); -> Commented until sendResult function is fixed
+      //sendResult(result, reply.raw) -> CORS headers aren't passed to reply
+      reply.code(200).send(result.payload);
     },
   });
 
