@@ -34,13 +34,7 @@ async function main() {
     method: ["POST", "GET"],
     url: "/graphql",
     handler: async (req, reply) => {
-      const {
-        headers,
-        method,
-        query,
-        body,
-        headers: { host, origin },
-      } = req;
+      const { headers, method, query, body } = req;
       const request: Request = {
         headers,
         method,
