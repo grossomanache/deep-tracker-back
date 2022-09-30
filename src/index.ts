@@ -4,7 +4,7 @@ import { schema } from "./schema";
 import fastify from "fastify";
 import cors from "@fastify/cors";
 import { PrismaClient } from "@prisma/client";
-import { contextFactory } from "./context";
+import { contextFactory, GraphQLContext } from "./context";
 import {
   getGraphQLParameters,
   sendResult,
@@ -15,6 +15,10 @@ import {
   sendResponseResult,
   sendPushResult,
   sendMultipartResponseResult,
+  Result,
+  ProcessRequestResult,
+  Response,
+  MultipartResponse,
 } from "graphql-helix";
 import { acceptedCors } from "./utils/corsOptions";
 import { schemaRemover } from "./utils/schemaRemover";
@@ -55,17 +59,24 @@ async function main() {
         return;
       }
 
-      const { query: queryParams, variables } = getGraphQLParameters(request);
-
-      const result = await processRequest({
-        request,
-        schema,
-        contextFactory: () => contextFactory(req),
+      const {
         query: queryParams,
         variables,
-      });
+        operationName,
+      } = getGraphQLParameters(request);
 
-      reply.send(result.payload);
+      const result: ProcessRequestResult<GraphQLContext, any> =
+        await processRequest({
+          request,
+          schema,
+          operationName,
+          contextFactory: () => contextFactory(req),
+          query: queryParams,
+          variables,
+        });
+
+      //sendResult(result, reply);
+      reply.code(200).send(result.payload);
     },
   });
 
