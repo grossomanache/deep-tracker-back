@@ -80,13 +80,10 @@ export const MetricQuery = extendType({
           postedBy: currentUser,
           name: { contains: filterByName ?? "" },
           date: {
-            gte: from ? new Date(from) : new Date(1000, 1, 1),
-            lte: to ? new Date(to) : new Date(3000, 1, 1),
+            gte: new Date(from ?? "1970-01-01"),
+            lte: new Date(to ?? "3970-01-01"),
           },
         };
-
-        console.log(where.date.gte);
-        console.log(where.date.lte);
 
         const metrics = await context.prisma.metric.findMany({
           where,
