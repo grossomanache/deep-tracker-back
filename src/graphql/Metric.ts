@@ -76,16 +76,17 @@ export const MetricQuery = extendType({
           throw new Error("Cannot retrieve metrics without logging in.");
         }
 
-        console.log(new Date(from));
-
         const where = {
           postedBy: currentUser,
           name: { contains: filterByName ?? "" },
           date: {
-            gte: new Date(from),
-            lte: new Date(to),
+            gte: from ? new Date(from) : new Date(1000, 1, 1),
+            lte: to ? new Date(to) : new Date(3000, 1, 1),
           },
         };
+
+        console.log(where.date.gte);
+        console.log(where.date.lte);
 
         const metrics = await context.prisma.metric.findMany({
           where,
@@ -95,6 +96,7 @@ export const MetricQuery = extendType({
             | Prisma.Enumerable<Prisma.MetricOrderByWithRelationInput>
             | undefined,
         });
+
         const count = await context.prisma.metric.count({ where });
         const id = `main-feed:${JSON.stringify(args)}`;
 
