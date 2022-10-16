@@ -48,7 +48,7 @@ type Mutation {
 }
 
 type Query {
-  feed(filterByName: String, orderBy: [MetricOrderByInput!], skip: Int, take: Int): Feed!
+  feed(filterByName: String, from: String, orderBy: [MetricOrderByInput!], skip: Int, take: Int, to: String): Feed!
 }
 
 enum Sort {

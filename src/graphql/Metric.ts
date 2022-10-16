@@ -64,10 +64,12 @@ export const MetricQuery = extendType({
         filterByName: stringArg(),
         skip: intArg(),
         take: intArg(),
+        from: stringArg(),
+        to: stringArg(),
         orderBy: arg({ type: list(nonNull(MetricOrderByInput)) }),
       },
       async resolve(parent, args, context, info) {
-        const { filterByName } = args;
+        const { filterByName, from, to } = args;
         const { currentUser } = context;
 
         if (!currentUser) {
@@ -77,6 +79,10 @@ export const MetricQuery = extendType({
         const where = {
           postedBy: currentUser,
           name: { contains: filterByName ?? "" },
+          date: {
+            gte: new Date(from ?? "1970-01-01"),
+            lte: new Date(to ?? "3970-01-01"),
+          },
         };
 
         const metrics = await context.prisma.metric.findMany({
@@ -87,6 +93,7 @@ export const MetricQuery = extendType({
             | Prisma.Enumerable<Prisma.MetricOrderByWithRelationInput>
             | undefined,
         });
+
         const count = await context.prisma.metric.count({ where });
         const id = `main-feed:${JSON.stringify(args)}`;
 

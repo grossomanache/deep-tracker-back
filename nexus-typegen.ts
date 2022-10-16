@@ -191,9 +191,11 @@ export interface NexusGenArgTypes {
   Query: {
     feed: { // args
       filterByName?: string | null; // String
+      from?: string | null; // String
       orderBy?: NexusGenInputs['MetricOrderByInput'][] | null; // [MetricOrderByInput!]
       skip?: number | null; // Int
       take?: number | null; // Int
+      to?: string | null; // String
     }
   }
 }
